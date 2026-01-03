@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/geist.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/Geist/geist-mono.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    /* Subtle starlight borders */
+    border-color: var(--color-gray-800, currentcolor);
+  }
+}
+
+:root {
+  --radius: 0.65rem;
+}
+
+/* Light Mode: "Moon Surface" */
+.light {
+  --radius: 0.65rem;
+  --background: oklch(0.97 0.01 260);
+  --foreground: oklch(0.2 0.04 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.04 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.04 260);
+  --primary: oklch(0.5 0.2 285);
+  --primary-foreground: oklch(0.98 0.01 285);
+  --secondary: oklch(0.92 0.02 260);
+  --secondary-foreground: oklch(0.3 0.04 260);
+  --muted: oklch(0.92 0.02 260);
+  --muted-foreground: oklch(0.5 0.04 260);
+  --accent: oklch(61.534% 0.17704 313.688);
+  --accent-foreground: oklch(0.98 0.01 200);
+  --destructive: oklch(0.6 0.2 25);
+  --border: oklch(0.9 0.02 260);
+  --input: oklch(0.9 0.02 260);
+  --ring: oklch(0.5 0.2 285);
+  --chart-1: oklch(0.5 0.2 285);
+  --chart-2: oklch(0.65 0.18 200);
+  --chart-3: oklch(0.7 0.15 320);
+  --chart-4: oklch(0.85 0.12 80);
+  --chart-5: oklch(0.6 0.15 160);
+  --sidebar: oklch(0.98 0.01 260);
+  --sidebar-foreground: oklch(0.2 0.04 260);
+  --sidebar-primary: oklch(0.5 0.2 285);
+  --sidebar-primary-foreground: oklch(0.98 0.01 285);
+  --sidebar-accent: oklch(0.65 0.18 200);
+  --sidebar-accent-foreground: oklch(0.98 0.01 200);
+  --sidebar-border: oklch(0.9 0.02 260);
+  --sidebar-ring: oklch(0.5 0.2 285);
+
+  --gradient-primary: linear-gradient(
+    135deg,
+    oklch(0.5 0.2 285),
+    oklch(0.6 0.15 320)
+  );
+  --gradient-card: linear-gradient(160deg, oklch(1 0 0), oklch(0.97 0.01 260));
+  --gradient-sidebar: linear-gradient(
+    180deg,
+    oklch(0.98 0.01 260),
+    oklch(0.95 0.02 260)
+  );
+  --gradient-accent: radial-gradient(
+    circle at 30% 30%,
+    oklch(0.65 0.18 200 / 0.15),
+    transparent 70%
+  );
+
+  /* Star Background */
+  --star-color: oklch(0% 0 0);
+  --gradient-from: oklch(19.83% 0.06311 287.571 / 0.1);
+  --gradient-to: oklch(19.83% 0.06311 287.571 / 0.1);
+
+  /* Star Card */
+  --star-card-bg: oklch(91.887% 0.0001 271.152);
+  --star-card-border: oklch(0.9 0.02 260);
+  --star-card-border-hover: oklch(0.8 0.02 260);
+}
+
+/* Dark Mode: "Deep Space" */
+.dark {
+  --background: oklch(0% 0 0); /* Pure Black */
+  --foreground: oklch(0.95 0.02 260);
+  --card: oklch(0.12 0.03 260); /* Deep Space Purple */
+  --card-foreground: oklch(0.95 0.02 260);
+  --popover: oklch(0.1 0.03 260);
+  --popover-foreground: oklch(0.95 0.02 260);
+
+  --primary: oklch(0.6 0.22 285); /* Nebula Violet */
+  --primary-foreground: oklch(0.99 0.01 285);
+
+  --secondary: oklch(0.2 0.04 260); /* Meteor Grey */
+  --secondary-foreground: oklch(0.95 0.02 260);
+
+  --muted: oklch(0.18 0.04 260);
+  --muted-foreground: oklch(0.65 0.05 260);
+
+  --accent: oklch(61.534% 0.17704 313.688);
+  --accent-foreground: oklch(0.1 0.05 190);
+
+  --destructive: oklch(0.55 0.22 25); /* Mars Red */
+  --border: oklch(1 0 0 / 15%); /* Faint starlight border */
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.6 0.22 285);
+
+  --chart-1: oklch(0.6 0.22 285);
+  --chart-2: oklch(0.75 0.15 190);
+  --chart-3: oklch(0.65 0.18 330);
+  --chart-4: oklch(0.85 0.15 90);
+  --chart-5: oklch(0.55 0.2 160);
+
+  --sidebar: oklch(0.05 0.02 260);
+  --sidebar-foreground: oklch(0.95 0.02 260);
+  --sidebar-primary: oklch(0.6 0.22 285);
+  --sidebar-primary-foreground: oklch(0.99 0.01 285);
+  --sidebar-accent: oklch(0.75 0.15 190);
+  --sidebar-accent-foreground: oklch(0.1 0.05 190);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.6 0.22 285);
+
+  /* Gradients – Space */
+  --gradient-primary: linear-gradient(
+    135deg,
+    oklch(0.6 0.22 285),
+    /* Nebula */ oklch(0.45 0.25 320) /* Deep Space Pink */
+  );
+  --gradient-card: linear-gradient(
+    160deg,
+    oklch(0.12 0.03 260),
+    oklch(0.05 0.01 260)
+  );
+  --gradient-sidebar: linear-gradient(
+    180deg,
+    oklch(0.08 0.02 260),
+    oklch(0% 0 0)
+  );
+  --gradient-accent: radial-gradient(
+    circle at 30% 30%,
+    oklch(0.75 0.15 190 / 0.2),
+    transparent 70%
+  );
+
+  /* Star Background */
+  --star-color: white;
+  --gradient-from: rgba(99, 102, 241, 0.1);
+  --gradient-to: rgba(168, 85, 247, 0.1);
+
+  /* Star Card */
+  --star-card-bg: rgba(0, 0, 0, 0.4);
+  --star-card-border: oklch(0.2 0.04 260);
+  --star-card-border-hover: oklch(0.3 0.04 260);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --color-radius: var(--radius);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --gradient-primary: var(--gradient-primary);
+  --gradient-card: var(--gradient-card);
+  --gradient-sidebar: var(--gradient-sidebar);
+  --gradient-accent: var(--gradient-accent);
+  --bg-gradient-sidebar: var(--gradient-sidebar);
+
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono";
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+}
