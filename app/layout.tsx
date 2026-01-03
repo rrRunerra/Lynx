@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Atlas",
-  description: "Template by Runerra",
+  title: "Lynx",
+  description: "Dashboard for Lynx by Runerra",
 };
 
 export default async function RootLayout({
