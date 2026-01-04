@@ -21,6 +21,7 @@ export default class CommandHandlerEvent extends Event {
       once: false,
       enabled: true,
       description: "Command Handler Event",
+      docs: "Handles slash commands and subcommands execution.",
     });
   }
 
@@ -110,7 +111,10 @@ export default class CommandHandlerEvent extends Event {
 
       // check if command is only for specific user/s
 
-      if (!command.userOnly.includes(interaction.user.id)) {
+      if (
+        command.userOnly.length > 0 &&
+        !command.userOnly.includes(interaction.user.id)
+      ) {
         const embed = new EmbedBuilder()
           .setTitle("This command is only for specified people.")
           .setColor("Red");

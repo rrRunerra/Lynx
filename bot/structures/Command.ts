@@ -18,6 +18,7 @@ export class Command {
   public cooldownFilteredUsers: string[];
   public allowDm: boolean;
   public client: LynxClient = client;
+  public docs: string;
 
   constructor(options: ICommandOptions) {
     this.name = options.name;
@@ -34,6 +35,7 @@ export class Command {
     this.nsfw = options.nsfw;
     this.cooldownFilteredUsers = options.cooldownFilteredUsers || [];
     this.allowDm = options.allowDm || false;
+    this.docs = options.docs;
   }
 
   public async autoComplete(
@@ -50,7 +52,7 @@ export interface ICommandOptions {
   description: string;
   category: string;
   options: Discord.ApplicationCommandOption[];
-  cooldown: number; //default 3 sec
+  cooldown: number; // in seconds
   userPermissions: Discord.PermissionResolvable[];
   clientPermissions: Discord.PermissionResolvable[];
   dev: string;
@@ -60,4 +62,5 @@ export interface ICommandOptions {
   nsfw: boolean;
   cooldownFilteredUsers: string[];
   allowDm: boolean;
+  docs: string;
 }

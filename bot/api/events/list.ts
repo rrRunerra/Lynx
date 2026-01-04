@@ -9,6 +9,7 @@ export default class ListEventsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
+      docs: "List all events",
     });
     this.client = client;
   }
@@ -21,6 +22,7 @@ export default class ListEventsApi extends API {
         description: event.description,
         type: event.type,
         once: event.once,
+        docs: event.docs,
       };
     });
 

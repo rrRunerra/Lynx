@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const resonse = {
-    name: "Atlas",
-    description: "Template for Runerra apps.",
+    name: "Lynx",
+    description: "Discord bot with Web interface.",
     links: {
-      github: "https://github.com/StarOmniscient/Atlas",
-      site: "",
+      github: "https://github.com/rrRunerra/Lynx",
+      site: "https://lynx.runerra.org",
     },
     icon: `${req.nextUrl.origin}/app_logo.png`,
     stars: [

@@ -8,6 +8,7 @@ export default class ListApisApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
+      docs: "List all api endpoints",
     });
     this.client = client;
   }
@@ -17,6 +18,7 @@ export default class ListApisApi extends API {
       return {
         name: route,
         enabled: api.enabled,
+        docs: api.docs,
       };
     });
 

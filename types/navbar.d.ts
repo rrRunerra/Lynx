@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 
-
-type UserRole = "ADMIN" | "USER"
+type UserRole = "ADMIN" | "USER";
 
 export interface NavChildItem {
   label: string;
   icon: ReactNode;
   href: string;
+  subtitle?: string;
   badge?: string;
   role?: UserRole; // Add role to child items
 }

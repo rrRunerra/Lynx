@@ -31,6 +31,8 @@ model User {
   status            String?   @db.LongText
   passwordChangedAt DateTime?
   apiKeys           ApiKey[]
+  lynxKey           String?
+  discordUserId     String?
 }
 
 model ApiKey {
@@ -45,6 +47,20 @@ model ApiKey {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model HomeworkExists {
+  id             Int    @id @default(autoincrement())
+  superID        String
+  title          String
+  forumChannelID String
+  forumID        String
+  guilID         String
+}
+
+model HomeWorkChannels {
+  guildId  String @id
+  channels Json   @db.Json
 }
 
 enum Role {

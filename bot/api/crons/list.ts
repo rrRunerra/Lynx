@@ -10,6 +10,7 @@ export default class ListCronsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
+      docs: "List all crons",
     });
     this.client = client;
   }
@@ -22,6 +23,7 @@ export default class ListCronsApi extends API {
         description: cron.description,
         repeatTime: cron.repeatTime,
         excludeOnStar: cron.excludeRunOnStart,
+        docs: cron.docs,
       };
     });
 

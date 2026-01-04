@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Lynx",
   description: "Dashboard for Lynx by Runerra",
+  manifest: "/site.webmanifest",
 };
 
 export default async function RootLayout({

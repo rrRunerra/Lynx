@@ -8,6 +8,7 @@ export class Event {
   public enabled: boolean;
   public description: string;
   public client: LynxClient;
+  public docs: string;
 
   constructor(client: LynxClient, options: IEventOptions) {
     this.name = options.name;
@@ -16,6 +17,7 @@ export class Event {
     this.once = options.once;
     this.enabled = options.enabled;
     this.client = client;
+    this.docs = options.docs;
   }
 
   public async eventExecute(...args: any): Promise<any> {}
@@ -27,4 +29,5 @@ export interface IEventOptions {
   once: boolean;
   enabled: boolean;
   description: string;
+  docs: string;
 }

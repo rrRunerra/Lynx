@@ -7,11 +7,15 @@ import {
   Database,
   Home,
   Info,
+  Key,
   List,
   Logs,
+  Palette,
   Repeat,
   RotateCwSquare,
   ScrollText,
+  Settings,
+  UserIcon,
 } from "lucide-react";
 import {
   ApiIcon,
@@ -74,6 +78,7 @@ export const navItems: NavbarConfig = [
           : commands?.map((command: any) => ({
               label: command.name,
               href: `/commands/${command.name}`,
+              subtitle: `View details and docs for ${command.name} command`,
             })),
       },
       {
@@ -86,6 +91,7 @@ export const navItems: NavbarConfig = [
           : events?.map((event: any) => ({
               label: event.name,
               href: `/events/${event.name}`,
+              subtitle: `View details and docs for ${event.name} event`,
             })),
       },
       {
@@ -98,18 +104,20 @@ export const navItems: NavbarConfig = [
           : crons?.map((cron: any) => ({
               label: cron.name,
               href: `/crons/${cron.name}`,
+              subtitle: `View details and docs for ${cron.name} cron`,
             })),
       },
       {
         label: "APIs",
         href: "/apis",
-        icon: <ApiIcon className="h-4 w-4" />,
+        icon: <Key className="h-4 w-4" />,
         subtitle: "List of all registered APIs",
         children: apis?.error
           ? undefined
           : apis?.map((api: any) => ({
               label: api.name,
               href: `/apis/${api.name}`,
+              subtitle: `View details and docs for ${api.name} API`,
             })),
       },
     ],
@@ -128,26 +136,31 @@ export const navItems: NavbarConfig = [
             label: "All",
             href: "/logs/all",
             icon: <ScrollText className="h-4 w-4" />,
+            subtitle: "View all system logs",
           },
           {
             label: "Errors",
             href: "/logs/errors",
             icon: <Ban className="h-4 w-4" />,
+            subtitle: "View error logs and exceptions",
           },
           {
             label: "Warnings",
             href: "/logs/warnings",
             icon: <CircleAlert className="h-4 w-4" />,
+            subtitle: "View system warnings",
           },
           {
             label: "Info",
             href: "/logs/info",
             icon: <Info className="h-4 w-4" />,
+            subtitle: "View informational logs",
           },
           {
             label: "Debug",
             href: "/logs/debug",
             icon: <Bug className="h-4 w-4" />,
+            subtitle: "View debug traces",
           },
         ],
       },
@@ -160,7 +173,39 @@ export const navItems: NavbarConfig = [
           : databases?.map((database: any) => ({
               label: database,
               href: `/databases/${database}`,
+              subtitle: `Manage ${database} database`,
             })),
+      },
+    ],
+  },
+  {
+    section: "General",
+    items: [
+      {
+        label: "Settings",
+        href: "/settings",
+        icon: <Settings className="h-4 w-4" />,
+        subtitle: "System settings",
+        children: [
+          {
+            label: "Appearance",
+            href: "/settings/appearance",
+            icon: <Palette className="h-4 w-4" />,
+            subtitle: "Customize the look and feel of your interface",
+          },
+          {
+            label: "Api keys",
+            href: "/settings/api-keys",
+            icon: <Key className="h-4 w-4" />,
+            subtitle: "Manage your API access tokens and permissions",
+          },
+          {
+            label: "Account",
+            href: "/settings/account",
+            icon: <UserIcon className="h-4 w-4" />,
+            subtitle: "Update your profile and account preferences",
+          },
+        ],
       },
     ],
   },

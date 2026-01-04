@@ -12,6 +12,13 @@ import {
 
 interface NavigationContextType {
   navbarConfig: NavbarConfig;
+  getSection: (sectionName: string) => NavSection | undefined;
+  getItem: (sectionName: string, itemLabel: string) => NavItem | undefined;
+  getChild: (
+    sectionName: string,
+    parentLabel: string,
+    childLabel: string
+  ) => NavItem | undefined;
   insertSection: (section: NavSection, position?: number) => void;
   insertItem: (sectionName: string, item: NavItem) => void;
   insertChild: (
@@ -42,7 +49,23 @@ export const NavigationContext = createContext<
 export function NavigationProvider({ children }: { children: ReactNode }) {
   const [navbarConfig, setNavbarConfig] = useState<NavbarConfig>(navItems);
 
-  // Helper to deep clone or map through sections to maintain immutability
+  const getSection = useCallback((sectionName: string) => {
+    return navbarConfig.find((s) => s.section === sectionName);
+  }, []);
+
+  const getItem = useCallback((sectionName: string, itemLabel: string) => {
+    return getSection(sectionName)?.items.find((i) => i.label === itemLabel);
+  }, []);
+
+  const getChild = useCallback(
+    (sectionName: string, parentLabel: string, childLabel: string) => {
+      return getItem(sectionName, parentLabel)?.children?.find(
+        (c) => c.label === childLabel
+      );
+    },
+    []
+  );
+
   const insertSection = useCallback(
     (section: NavSection, position: number = 0) => {
       setNavbarConfig((prev) => {
@@ -167,6 +190,9 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     <NavigationContext.Provider
       value={{
         navbarConfig,
+        getSection,
+        getItem,
+        getChild,
         insertSection,
         insertItem,
         insertChild,

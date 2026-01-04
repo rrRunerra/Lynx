@@ -10,6 +10,7 @@ export default class ReadyEvent extends Event {
       once: true,
       enabled: true,
       description: "Ready event",
+      docs: "Logs when the bot is online and ready.",
     });
   }
 

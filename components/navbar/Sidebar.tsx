@@ -11,7 +11,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useEffect, useMemo, useState } from "react";
-
 export default function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

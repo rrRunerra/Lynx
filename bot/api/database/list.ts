@@ -7,6 +7,7 @@ export default class ListDatabasesApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
+      docs: "List all databases",
     });
     this.client = client;
   }

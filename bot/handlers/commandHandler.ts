@@ -43,8 +43,7 @@ export class CommandHandler {
         return;
       }
       // push owner and dev server just to be sure
-      command.userOnly.push(process.env.LYNX_OWNER!);
-      command.serverOnly.push(process.env.DEV_SERVER!);
+      command.cooldownFilteredUsers.push(process.env.LYNX_OWNER!);
 
       this.client.commands.set(command.name, command as Command);
       console.info(`Loaded command: ${command.name}`);

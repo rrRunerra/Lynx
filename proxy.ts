@@ -5,8 +5,14 @@ import { getToken } from "next-auth/jwt";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Allow login page, auth routes, and API routes
-  if (pathname.startsWith("/auth") || pathname.startsWith("/api")) {
+  if (
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/commands") ||
+    pathname.startsWith("/events") ||
+    pathname.startsWith("/crons") ||
+    pathname.startsWith("/dashboard")
+  ) {
     return NextResponse.next();
   }
 
@@ -23,57 +29,78 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (pathname.startsWith("/logs") || pathname.startsWith("/databases")) {
+    const user = await import("@/lib/prisma").then((m) =>
+      m.default.user.findUnique({
+        where: {
+          email: token.email as string,
+        },
+      })
+    );
 
+    if (!user) {
+      const loginUrl = new URL("/auth/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", req.url);
+      return NextResponse.redirect(loginUrl);
+    }
 
-
+    if (user.lynxKey !== "linked") {
+      const linkUrl = new URL("/auth/link-required", req.url);
+      return NextResponse.redirect(linkUrl);
+    }
+  }
   if (token?.email) {
-      try {
+    try {
+      const user = await import("@/lib/prisma").then((m) =>
+        m.default.user.findUnique({
+          where: { email: token.email as string },
+        })
+      );
 
-        const user = await import("@/lib/prisma").then(m => m.default.user.findUnique({
-            where: { email: token.email as string }
-        }));
+      if (user) {
+        const needsUpdate =
+          user.username !== token.username ||
+          user.displayName !== token.displayName ||
+          user.avatarUrl !== token.avatarUrl;
 
-        if (user) {
-            const needsUpdate = 
-                user.username !== token.username || 
-                user.displayName !== token.displayName || 
-                user.avatarUrl !== token.avatarUrl;
+        if (needsUpdate) {
+          const newToken = {
+            ...token,
+            username: user.username,
+            displayName: user.displayName,
+            avatarUrl: user.avatarUrl,
+          };
 
-            if (needsUpdate) {
-                const newToken = {
-                    ...token,
-                    username: user.username,
-                    displayName: user.displayName,
-                    avatarUrl: user.avatarUrl,
-                };
+          // Re-encode token
+          const encoded = await import("next-auth/jwt").then((m) =>
+            m.encode({
+              token: newToken,
+              secret: process.env.NEXTAUTH_SECRET!,
+            })
+          );
 
-                // Re-encode token
-                const encoded = await import("next-auth/jwt").then(m => m.encode({
-                    token: newToken,
-                    secret: process.env.NEXTAUTH_SECRET!,
-                }));
+          const response = NextResponse.next();
 
-                const response = NextResponse.next();
-                
-                // Determine cookie name based on environment
-                const cookieName = process.env.NODE_ENV === "production" 
-                    ? "__Secure-next-auth.session-token" 
-                    : "next-auth.session-token";
+          // Determine cookie name based on environment
+          const cookieName =
+            process.env.NODE_ENV === "production"
+              ? "__Secure-next-auth.session-token"
+              : "next-auth.session-token";
 
-                response.cookies.set(cookieName, encoded, {
-                    httpOnly: true,
-                    sameSite: "lax",
-                    path: "/",
-                    secure: process.env.NODE_ENV === "production",
-                });
-                
-                return response;
-            }
+          response.cookies.set(cookieName, encoded, {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            secure: process.env.NODE_ENV === "production",
+          });
+
+          return response;
         }
-      } catch (error) {
-          console.error("Proxy session update validation failed:", error);
-          // Continue request even if validation fails
       }
+    } catch (error) {
+      console.error("Proxy session update validation failed:", error);
+      // Continue request even if validation fails
+    }
   }
 
   return NextResponse.next();

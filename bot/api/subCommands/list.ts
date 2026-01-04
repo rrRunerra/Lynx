@@ -9,6 +9,7 @@ export default class ListCommandsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
+      docs: "List all sub-commands",
     });
     this.client = client;
   }
@@ -18,6 +19,7 @@ export default class ListCommandsApi extends API {
       return {
         name: command.name,
         enabled: command.enabled,
+        docs: command.docs,
       };
     });
 

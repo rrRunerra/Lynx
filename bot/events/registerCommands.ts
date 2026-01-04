@@ -13,6 +13,7 @@ export default class RegisterCommandsEvent extends Event {
       once: true,
       enabled: true,
       description: "Register Slash Commands",
+      docs: "Registers commands globally, for specified servers or only for dev server.",
     });
   }
 

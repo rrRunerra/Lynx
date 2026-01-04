@@ -3,10 +3,12 @@ import { Request, Response } from "express";
 export class API {
   public route?: string;
   public enabled: boolean;
+  public docs: string;
 
-  constructor(options: { route?: string; enabled: boolean }) {
+  constructor(options: { route?: string; enabled: boolean; docs: string }) {
     this.route = options.route;
     this.enabled = options.enabled;
+    this.docs = options.docs;
   }
 
   public GET(req: Request, res: Response): any {

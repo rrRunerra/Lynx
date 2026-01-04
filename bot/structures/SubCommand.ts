@@ -5,11 +5,13 @@ export class SubCommand {
   public name: string;
   public enabled: boolean;
   public client: LynxClient;
+  public docs: string;
 
   constructor(client: LynxClient, options: ISubCommandOptions) {
     this.name = options.name;
     this.enabled = options.enabled;
     this.client = client;
+    this.docs = options.docs;
   }
 
   public async slashCommandExecute(interaction: ChatInputCommandInteraction) {}
@@ -18,4 +20,5 @@ export class SubCommand {
 export interface ISubCommandOptions {
   name: string;
   enabled: boolean;
+  docs: string;
 }
