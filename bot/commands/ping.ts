@@ -18,7 +18,7 @@ export default class PingCommand extends Command {
       clientPermissions: [],
       userPermissions: ["AttachFiles"],
       dev: client.mode,
-      enabled: true,
+      enabled: false,
       cooldownFilteredUsers: [],
       serverOnly: [],
       userOnly: [],

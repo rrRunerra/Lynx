@@ -32,15 +32,20 @@ export default class RegisterCommandsEvent extends Event {
 
     const globalCommandList = this.client.commands.filter(
       (command) =>
-        command.dev != "development" && command.serverOnly.length == 0
+        command.dev != "development" &&
+        command.serverOnly.length == 0 &&
+        command.enabled
     );
 
     const devCommandList = this.client.commands.filter(
-      (command) => command.dev == "development"
+      (command) => command.dev == "development" && command.enabled
     );
 
     const serverCommandList = this.client.commands.filter(
-      (command) => command.dev != "development" && command.serverOnly.length > 0
+      (command) =>
+        command.enabled &&
+        command.dev != "development" &&
+        command.serverOnly.length > 0
     );
 
     if (globalCommandList.size > 0) {

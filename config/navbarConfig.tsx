@@ -13,11 +13,41 @@ import {
   RotateCwSquare,
   ScrollText,
 } from "lucide-react";
+import {
+  ApiIcon,
+  CommandsIcon,
+  CronsIcon,
+  EventsIcon,
+} from "@/components/icons/StructureIcons";
 
 // TODO
-// route to get databases from lynx
-// route to get commands/events/crons from lynx
 // route to get servers lynx is in
+
+async function safeFetch(url: string, fallback: any) {
+  try {
+    const res = await fetch(url);
+    return await res.json();
+  } catch (err) {
+    console.error(`Failed to fetch from ${url}:`, err);
+    return fallback;
+  }
+}
+
+const commands = await safeFetch("http://localhost:4444/commands/list", {
+  error: "No commands found",
+});
+const events = await safeFetch("http://localhost:4444/events/list", {
+  error: "No events found",
+});
+const crons = await safeFetch("http://localhost:4444/crons/list", {
+  error: "No crons found",
+});
+const apis = await safeFetch("http://localhost:4444/apis/list", {
+  error: "No apis found",
+});
+const databases = await safeFetch("http://localhost:4444/database/list", {
+  error: "No databases found",
+});
 
 export const navItems: NavbarConfig = [
   {
@@ -37,28 +67,56 @@ export const navItems: NavbarConfig = [
       {
         label: "Commands",
         href: "/commands",
-        icon: <Command className="h-4 w-4" />,
+        icon: <CommandsIcon className="h-4 w-4" />,
         subtitle: "List of all commands",
-        children: [],
+        children: commands?.error
+          ? undefined
+          : commands?.map((command: any) => ({
+              label: command.name,
+              href: `/commands/${command.name}`,
+            })),
       },
       {
         label: "Events",
         href: "/events",
-        icon: <RotateCwSquare className="h-4 w-4" />,
+        icon: <EventsIcon className="h-4 w-4" />,
         subtitle: "List of all events",
-        children: [],
+        children: events?.error
+          ? undefined
+          : events?.map((event: any) => ({
+              label: event.name,
+              href: `/events/${event.name}`,
+            })),
       },
       {
         label: "Crons",
         href: "/crons",
-        icon: <Repeat className="h-4 w-4" />,
+        icon: <CronsIcon className="h-4 w-4" />,
         subtitle: "List of all crons",
-        children: [],
+        children: crons?.error
+          ? undefined
+          : crons?.map((cron: any) => ({
+              label: cron.name,
+              href: `/crons/${cron.name}`,
+            })),
+      },
+      {
+        label: "APIs",
+        href: "/apis",
+        icon: <ApiIcon className="h-4 w-4" />,
+        subtitle: "List of all registered APIs",
+        children: apis?.error
+          ? undefined
+          : apis?.map((api: any) => ({
+              label: api.name,
+              href: `/apis/${api.name}`,
+            })),
       },
     ],
   },
   {
     section: "Administration",
+    role: "ADMIN",
     items: [
       {
         label: "Logs",
@@ -95,8 +153,14 @@ export const navItems: NavbarConfig = [
       },
       {
         label: "Databases",
-        href: "database",
+        href: "/databases",
         icon: <Database className="h-4 w-4" />,
+        children: databases?.error
+          ? undefined
+          : databases?.map((database: any) => ({
+              label: database,
+              href: `/databases/${database}`,
+            })),
       },
     ],
   },

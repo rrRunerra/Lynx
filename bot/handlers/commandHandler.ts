@@ -22,13 +22,19 @@ export class CommandHandler {
 
       if (isSubCommand) {
         const command: SubCommand = new CommandClass();
+        if (!command.name) {
+          console.error(
+            `Subcommand: ${file.split(path.sep).pop()} does not have a name`
+          );
+          return;
+        }
+
         this.client.subCommands.set(command.name, command as SubCommand);
+        console.info(`Loaded subcommand: ${command.name}`);
         return;
       }
 
       const command: Command = new CommandClass();
-
-      if (!command.enabled) return;
 
       if (!command.name) {
         console.error(
@@ -40,11 +46,7 @@ export class CommandHandler {
       command.userOnly.push(process.env.LYNX_OWNER!);
       command.serverOnly.push(process.env.DEV_SERVER!);
 
-      if (file.split("/").pop()?.split(".")[2] !== undefined) {
-        this.client.subCommands.set(command.name, command as SubCommand);
-      } else {
-        this.client.commands.set(command.name, command as Command);
-      }
+      this.client.commands.set(command.name, command as Command);
       console.info(`Loaded command: ${command.name}`);
     });
     console.log("All commands loaded");

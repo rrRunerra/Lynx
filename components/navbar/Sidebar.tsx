@@ -8,7 +8,8 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { ArrowRight, ChevronDown, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
 import { useEffect, useMemo, useState } from "react";
 
 export default function Sidebar() {
@@ -16,6 +17,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const { navbarConfig } = useNavigation();
+  const router = useRouter();
 
   const { data: session, status } = useSession();
   const userRole = session?.user?.role;
@@ -28,11 +30,12 @@ export default function Sidebar() {
       section.items.forEach((item) => {
         if (item.children) {
           const uniqueKey = `${section.section}-${item.label}`;
+          const isParentActive = pathname === item.href;
           const isChildActive = item.children.some(
             (child) =>
               pathname === child.href || pathname.startsWith(child.href + "/")
           );
-          if (isChildActive) newOpenState[uniqueKey] = true;
+          if (isChildActive || isParentActive) newOpenState[uniqueKey] = true;
         }
       });
     });
@@ -78,45 +81,51 @@ export default function Sidebar() {
                     return (
                       <li key={itemIdx}>
                         <div className="relative">
-                          <Button
-                            variant="ghost"
-                            className={`w-full justify-start gap-3 px-3 py-2 rounded-md ${
-                              isActive
-                                ? "bg-primary/15 text-primary"
-                                : "text-foreground/80 hover:text-foreground"
-                            }`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (hasChildren) toggleSubmenu(uniqueKey);
-                            }}
-                          >
-                            <span
-                              className={`h-4 w-4 ${
-                                isActive ? "text-primary" : "text-foreground/60"
+                          <Link href={item.href || "#"} scroll={false}>
+                            <Button
+                              variant="ghost"
+                              className={`w-full justify-start gap-3 px-3 py-2 rounded-md ${
+                                isActive
+                                  ? "bg-primary/15 text-primary"
+                                  : "text-foreground/80 hover:text-foreground"
                               }`}
+                              onClick={(e) => {
+                                if (hasChildren) {
+                                  toggleSubmenu(uniqueKey);
+                                }
+                              }}
                             >
-                              {item.icon}
-                            </span>
-                            <span className="flex-1 text-left">
-                              {item.label}
-                            </span>
-                            {item.badge && (
-                              <Badge
-                                variant="secondary"
-                                className="ml-2 text-xs max-w-[80px] truncate block"
-                                title={item.badge} // Good UX: shows full text on hover
-                              >
-                                {item.badge}
-                              </Badge>
-                            )}
-                            {hasChildren &&
-                              (isSubmenuOpen ? (
-                                <ChevronDown className="h-4 w-4 rotate-180 transition-transform" />
-                              ) : (
-                                <ArrowRight className="h-4 w-4 transition-transform" />
-                              ))}
-                          </Button>
+                              {item.icon && (
+                                <span
+                                  className={`h-4 w-4 ${
+                                    isActive
+                                      ? "text-primary"
+                                      : "text-foreground/60"
+                                  }`}
+                                >
+                                  {item.icon}
+                                </span>
+                              )}
+                              <span className="flex-1 text-left">
+                                {item.label}
+                              </span>
+                              {item.badge && (
+                                <Badge
+                                  variant="secondary"
+                                  className="ml-2 text-xs max-w-[80px] truncate block"
+                                  title={item.badge}
+                                >
+                                  {item.badge}
+                                </Badge>
+                              )}
+                              {hasChildren &&
+                                (isSubmenuOpen ? (
+                                  <ChevronDown className="h-4 w-4 rotate-180 transition-transform" />
+                                ) : (
+                                  <ArrowRight className="h-4 w-4 transition-transform" />
+                                ))}
+                            </Button>
+                          </Link>
 
                           {hasChildren && (
                             <ul
@@ -144,15 +153,17 @@ export default function Sidebar() {
                                             : "text-foreground/80 hover:bg-primary/10 hover:text-foreground"
                                         }`}
                                       >
-                                        <span
-                                          className={`h-4 w-4 ${
-                                            childIsActive
-                                              ? "text-primary"
-                                              : "text-foreground/60"
-                                          }`}
-                                        >
-                                          {child.icon}
-                                        </span>
+                                        {child.icon && (
+                                          <span
+                                            className={`h-4 w-4 ${
+                                              childIsActive
+                                                ? "text-primary"
+                                                : "text-foreground/60"
+                                            }`}
+                                          >
+                                            {child.icon}
+                                          </span>
+                                        )}
                                         <span className="flex-1 truncate">
                                           {child.label}
                                         </span>

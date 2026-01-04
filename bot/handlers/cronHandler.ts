@@ -20,7 +20,6 @@ export class CronHandler {
       const { default: CronClass } = await import(pathToFileURL(file).href);
       const cron: Cron = new CronClass(this.client);
       this.client.crons.set(cron.name, cron as Cron);
-      if (!cron.enabled) return;
 
       if (!cron.name) {
         console.error(

@@ -8,6 +8,8 @@ import { CommandHandler } from "../handlers/commandHandler";
 import { EventHandler } from "../handlers/eventHandler";
 import { CronHandler } from "../handlers/cronHandler";
 import "dotenv/config";
+import { APIHandler } from "../handlers/apiHandler";
+import { API } from "../structures/Api";
 
 export class LynxClient extends Client {
   public mode: "development" | "production";
@@ -19,14 +21,17 @@ export class LynxClient extends Client {
   public crons: Collection<string, Cron>;
   public events: Collection<string, Event>;
   public cooldowns: Collection<string, Collection<string, number>>;
+  public apis: Collection<string, API>;
 
   public commandHandler: CommandHandler;
   public eventHandler: EventHandler;
   public cronHandler: CronHandler;
+  public apiHandler: APIHandler;
 
   public areCommandsLoaded: Boolean = false;
   public areEventsLoaded: Boolean = false;
   public areCronsLoaded: Boolean = false;
+  public areAPILoaded: Boolean = false;
 
   public constructor() {
     super({
@@ -52,14 +57,17 @@ export class LynxClient extends Client {
     this.cooldowns = new Collection();
     this.crons = new Collection();
     this.events = new Collection();
+    this.apis = new Collection();
 
     this.commandHandler = new CommandHandler(this);
     this.eventHandler = new EventHandler(this);
     this.cronHandler = new CronHandler(this);
+    this.apiHandler = new APIHandler(this);
 
     this.commandHandler.loadCommands();
     this.eventHandler.loadEvents();
     this.cronHandler.runCrons();
+    this.apiHandler.loadAPI();
   }
 
   public override async login() {
