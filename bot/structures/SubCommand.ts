@@ -14,7 +14,9 @@ export class SubCommand {
     this.docs = options.docs;
   }
 
-  public async slashCommandExecute(interaction: ChatInputCommandInteraction) {}
+  public async slashCommandExecute(
+    interaction: ChatInputCommandInteraction
+  ): Promise<any> {}
 }
 
 export interface ISubCommandOptions {

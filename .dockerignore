@@ -3,6 +3,13 @@ node_modules
 .idea
 .git
 Dockerfile
+docker-compose.yml
 .gitignore
 .env
-README.md 
+.env.*
+README.md
+.next
+*.log
+npm-debug.log*
+video_cache
+.env

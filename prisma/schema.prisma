@@ -49,7 +49,7 @@ model ApiKey {
   @@index([userId])
 }
 
-model HomeworkExists {
+model LynxHomeworkExists {
   id             Int    @id @default(autoincrement())
   superID        String
   title          String
@@ -58,9 +58,14 @@ model HomeworkExists {
   guilID         String
 }
 
-model HomeWorkChannels {
+model LynxHomeWorkChannels {
   guildId  String @id
   channels Json   @db.Json
+}
+
+model LynxRngRigConfig {
+  id             String @id @default(cuid())
+  ignoredNumbers Json   @db.Json
 }
 
 enum Role {

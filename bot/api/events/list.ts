@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { LynxClient } from "../../client/client";
 import { API } from "../../structures/Api";
-import { Event } from "@/bot/structures/Event";
+import { Event } from "../../structures/Event";
 
 export default class ListEventsApi extends API {
   public client: LynxClient;

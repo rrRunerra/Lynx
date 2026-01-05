@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { LynxClient } from "../../client/client";
 import { API } from "../../structures/Api";
-import { Event } from "@/bot/structures/Event";
 
 export default class GetCommandApi extends API {
   public client: LynxClient;
@@ -18,6 +17,15 @@ export default class GetCommandApi extends API {
   public GET = (req: Request, res: Response) => {
     const command = this.client.commands.get(req.params.name);
     if (!command) return res.status(404).json({ error: "Command not found" });
+
+    const subCommands = Array.from(this.client.subCommands.values())
+      .filter((sub) => sub.name.startsWith(`${command.name}.`))
+      .map((sub) => ({
+        name: sub.name,
+        enabled: sub.enabled,
+        docs: sub.docs,
+      }));
+
     return res.json({
       name: command.name,
       description: command.description,
@@ -34,6 +42,7 @@ export default class GetCommandApi extends API {
       cooldownFilteredUsers: command.cooldownFilteredUsers,
       allowDm: command.allowDm,
       docs: command.docs,
+      subCommands,
     });
   };
 }

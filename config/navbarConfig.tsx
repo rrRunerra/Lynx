@@ -37,19 +37,19 @@ async function safeFetch(url: string, fallback: any) {
   }
 }
 
-const commands = await safeFetch("http://localhost:4444/commands/list", {
+const commands = await safeFetch("/api/commands/list", {
   error: "No commands found",
 });
-const events = await safeFetch("http://localhost:4444/events/list", {
+const events = await safeFetch("/api/events/list", {
   error: "No events found",
 });
-const crons = await safeFetch("http://localhost:4444/crons/list", {
+const crons = await safeFetch("/api/crons/list", {
   error: "No crons found",
 });
-const apis = await safeFetch("http://localhost:4444/apis/list", {
+const apis = await safeFetch("/api/apis/list", {
   error: "No apis found",
 });
-const databases = await safeFetch("http://localhost:4444/database/list", {
+const databases = await safeFetch("/api/database/list", {
   error: "No databases found",
 });
 
@@ -175,6 +175,12 @@ export const navItems: NavbarConfig = [
               href: `/databases/${database}`,
               subtitle: `Manage ${database} database`,
             })),
+      },
+      {
+        label: "Configuration",
+        href: "/config",
+        icon: <Settings className="h-4 w-4" />,
+        subtitle: "Lynx configuration",
       },
     ],
   },

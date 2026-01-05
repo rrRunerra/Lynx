@@ -1,15 +1,20 @@
 Create .env file with
-```
-# NEXT
-NEXTAUTH_SECRET="" # https://generate.plus/en/base64
-NEXTAUTH_URL="http://localhost:3000"
 
-# DB
-DB_HOST=""  # With Port eg. localhost:3306
-DB_USER=""
-DB_PASSWORD="" 
-DB_DATABASE="" # eg main or dev
-DB_TYPE="mysql" # Mysql recommended
-DATABASE_URL="${DB_TYPE}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_DATABASE}"
+```
+      NEXTAUTH_SECRET=""
+      NEXTAUTH_URL="http://localhost:3032"
+      DB_HOST=""
+      DB_USER=""
+      DB_PASSWORD=""
+      DB_DATABASE=""
+      DB_TYPE=""
+      DATABASE_URL=""
+      PROD_LYNX_TOKEN=""
+      DEV_SERVER=""
+      LYNX_OWNER=""
+      LYNX_PORT=4444
+      rrLynxKey=""
+      EDU_NAME=""
+      EDU_PASS=""
 
 ```

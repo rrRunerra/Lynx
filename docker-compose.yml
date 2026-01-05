@@ -1,0 +1,44 @@
+services:
+  # Lynx Application (Next.js + Discord Bot)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Prisma needs a valid DATABASE_URL for generate (schema validation)
+        DATABASE_URL: ${DATABASE_URL}
+        DB_HOST: ${DB_HOST}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_DATABASE: ${DB_DATABASE}
+        DB_TYPE: ${DB_TYPE}
+        LYNX_API_URL: ${LYNX_API_URL}
+        LYNX_PORT: ${LYNX_PORT}
+    container_name: lynx
+    restart: unless-stopped
+    environment:
+      NEXTAUTH_SECRET: ""
+      NEXTAUTH_URL: "http://localhost:3032"
+      DB_HOST: ""
+      DB_USER: ""
+      DB_PASSWORD: ""
+      DB_DATABASE: ""
+      DB_TYPE: ""
+      DATABASE_URL: ""
+      PROD_LYNX_TOKEN: ""
+      DEV_SERVER: ""
+      LYNX_OWNER: ""
+      LYNX_PORT: 4444
+      LYNX_API_URL: "http://localhost:4444"
+      rrLynxKey: ""
+      EDU_NAME: ""
+      EDU_PASS: ""
+    ports:
+      - "3032:3000"
+      - "4444:${LYNX_PORT}"
+    volumes:
+      # Persist video cache
+      - ./video_cache:/app/video_cache
+
+volumes:
+  lynx_db_data:

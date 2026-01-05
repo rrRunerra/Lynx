@@ -119,6 +119,48 @@ export default async function CommandPage({
               </CardContent>
             </StarCard>
           )}
+
+          {/* Subcommands */}
+          {command.subCommands && command.subCommands.length > 0 && (
+            <StarCard>
+              <CardHeader>
+                <CardTitle className="text-xl text-zinc-100 flex items-center gap-2">
+                  <Terminal className="w-5 h-5 text-zinc-400" />
+                  Subcommands
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {command.subCommands.map((sub: any) => (
+                    <div
+                      key={sub.name}
+                      className="p-4 rounded-lg bg-zinc-500/5 border border-zinc-500/10 hover:border-zinc-500/20 transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-zinc-200">
+                          {sub.name.split(".").pop()}
+                        </span>
+                        <Badge
+                          variant={sub.enabled ? "default" : "destructive"}
+                          className={`text-xs ${
+                            sub.enabled
+                              ? "bg-emerald-500/10 text-emerald-400"
+                              : ""
+                          }`}
+                        >
+                          {sub.enabled ? "Enabled" : "Disabled"}
+                        </Badge>
+                      </div>
+                      <p className="text-zinc-400 text-sm">
+                        {sub.docs || "No documentation provided."}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </StarCard>
+          )}
+
           {/* Permissions */}
           <StarCard>
             <CardHeader>

@@ -1,5 +1,5 @@
-import { LynxClient } from "@/bot/client/client";
-import { API } from "@/bot/structures/Api";
+import { LynxClient } from "../../client/client";
+import { API } from "../../structures/Api";
 import { Request, Response } from "express";
 export default class ListDatabasesApi extends API {
   public client: LynxClient;

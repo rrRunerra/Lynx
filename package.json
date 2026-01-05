@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"tsx bot/index.ts --dev\" \"next dev --turbopack\" ",
+    "dev-both": "concurrently \"tsx bot/index.ts --dev\" \"next dev --turbopack\" ",
+    "dev-bot": "nodemon --watch bot --exec tsx bot/index.ts --dev",
+    "dev-website": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "concurrently \"next start\" \"tsx bot/index.ts\"",
     "lint": "biome check",

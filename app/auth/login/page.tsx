@@ -1,69 +1,70 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
-import { signIn } from "next-auth/react"
-import PixelBlast from "@/components/backgrounds/PixelBlast"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import PixelBlast from "@/components/backgrounds/PixelBlast";
+import Link from "next/link";
 
 export default function Page() {
-  const [identifier, setIdentifier] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setMessage("")
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     const res = await signIn("credentials", {
       redirect: false,
       identifier,
       password,
-    })
+    });
 
     if (res?.error) {
-      let errorMessage = "Invalid email/username or password."
+      let errorMessage = "Invalid email/username or password.";
       if (res.error === "CredentialsSignin") {
-        errorMessage = "Invalid email/username or password."
+        errorMessage = "Invalid email/username or password.";
       } else if (res.error === "CallbackRouteError") {
-        errorMessage = "Authentication failed. Please try again."
+        errorMessage = "Authentication failed. Please try again.";
       }
-      setMessage(`❌ ${errorMessage}`)
+      setMessage(`❌ ${errorMessage}`);
     } else if (res?.ok) {
-      window.location.href = "/home"
+      window.location.href = "/dashboard";
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <div className="relative flex min-h-svh w-full items-center justify-center p-6 md:p-10 overflow-hidden">
       {/* PixelBlast Background */}
       <div className="absolute inset-0 -z-10">
-        <PixelBlast 
-        variant="diamond"
-        pixelSize={3}
-        patternScale={4.75}
-        patternDensity={0.75}
-        pixelSizeJitter={0.4}
-        speed={0.15}
-        edgeFade={0.31}
-        enableRipples={true}
-        className="size-full" 
-        style={undefined} />
+        <PixelBlast
+          variant="diamond"
+          pixelSize={3}
+          patternScale={4.75}
+          patternDensity={0.75}
+          pixelSizeJitter={0.4}
+          speed={0.15}
+          edgeFade={0.31}
+          enableRipples={true}
+          className="size-full"
+          style={undefined}
+        />
       </div>
 
       <div className="relative z-10 w-full max-w-sm">
@@ -142,5 +143,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }

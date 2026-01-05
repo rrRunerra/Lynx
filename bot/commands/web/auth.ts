@@ -1,5 +1,5 @@
-import { client } from "@/bot";
-import { Command } from "@/bot/structures/Command";
+import { client } from "../../index";
+import { Command } from "../../structures/Command";
 import {
   ApplicationCommandOptionType,
   ChatInputCommandInteraction,

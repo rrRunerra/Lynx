@@ -64,10 +64,7 @@ export class LynxClient extends Client {
     this.cronHandler = new CronHandler(this);
     this.apiHandler = new APIHandler(this);
 
-    this.commandHandler.loadCommands();
     this.eventHandler.loadEvents();
-    this.cronHandler.runCrons();
-    this.apiHandler.loadAPI();
   }
 
   public override async login() {
@@ -89,5 +86,15 @@ export class LynxClient extends Client {
     if (!token) throw new Error("No token provided");
 
     return super.login(token);
+  }
+
+  public async start() {
+    await this.login();
+
+    await new Promise<void>((resolve) => this.once("ready", () => resolve()));
+
+    this.commandHandler.loadCommands();
+    this.cronHandler.runCrons();
+    this.apiHandler.loadAPI();
   }
 }

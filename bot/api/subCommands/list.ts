@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { LynxClient } from "../../client/client";
 import { API } from "../../structures/Api";
-import { SubCommand } from "@/bot/structures/SubCommand";
+import { SubCommand } from "../../structures/SubCommand";
 
 export default class ListCommandsApi extends API {
   public client: LynxClient;

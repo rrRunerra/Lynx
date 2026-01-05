@@ -29,7 +29,11 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (pathname.startsWith("/logs") || pathname.startsWith("/databases")) {
+  if (
+    pathname.startsWith("/logs") ||
+    pathname.startsWith("/databases") ||
+    pathname.startsWith("/config")
+  ) {
     const user = await import("@/lib/prisma").then((m) =>
       m.default.user.findUnique({
         where: {

@@ -35,34 +35,37 @@ export default function ApisPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {apisItem?.children && apisItem.children.length > 0 ? (
           apisItem.children.map((category) => (
-            <Link key={category.href} href={category.href}>
-              <StarCard className="h-full hover:scale-[1.02] transition-transform duration-300 cursor-pointer group">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-lg border border-zinc-500/20 text-white relative overflow-hidden">
-                      <div
-                        className="absolute inset-0 opacity-50"
-                        style={{
-                          backgroundImage: "url(/space-background.svg)",
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      />
-                      <div className="relative z-10">{apisItem.icon}</div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
+            // <Link key={category.href} href={category.href}>
+            <StarCard
+              className="h-full hover:scale-[1.02] transition-transform duration-300 cursor-pointer group"
+              key={category.href}
+            >
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg border border-zinc-500/20 text-white relative overflow-hidden">
+                    <div
+                      className="absolute inset-0 opacity-50"
+                      style={{
+                        backgroundImage: "url(/space-background.svg)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                    <div className="relative z-10">{apisItem.icon}</div>
                   </div>
-                  <CardTitle className="mt-4 text-xl text-zinc-100">
-                    {category.label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400 leading-relaxed">
-                    {category.subtitle}
-                  </p>
-                </CardContent>
-              </StarCard>
-            </Link>
+                  <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
+                </div>
+                <CardTitle className="mt-4 text-xl text-zinc-100">
+                  {category.label}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  {category.subtitle}
+                </p>
+              </CardContent>
+            </StarCard>
+            // </Link>
           ))
         ) : (
           <div className="col-span-full text-center text-zinc-400 py-10">
