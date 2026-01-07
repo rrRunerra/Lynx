@@ -217,24 +217,29 @@ export default function Sidebar() {
         {status === "authenticated" && (
           <div className="border-t border-border p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={session.user.avatarUrl ?? ""} alt="User" />
-                  <AvatarFallback className="bg-muted text-foreground">
-                    {session.user.username?.charAt(0)?.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="text-sm font-medium text-foreground">
-                    {session.user.username}
-                  </div>
-                  <div className="text-xs text-foreground/60">
-                    {session.user.email.length > 20
-                      ? session.user.email.slice(0, 20) + "..."
-                      : session.user.email}
+              <Link href={`/user/${session.user.id}`}>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={session.user.avatarUrl ?? ""}
+                      alt="User"
+                    />
+                    <AvatarFallback className="bg-muted text-foreground">
+                      {session.user.username?.charAt(0)?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="text-sm font-medium text-foreground">
+                      {session.user.username}
+                    </div>
+                    <div className="text-xs text-foreground/60">
+                      {session.user.email.length > 20
+                        ? session.user.email.slice(0, 20) + "..."
+                        : session.user.email}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
               <Button
                 variant="ghost"
                 size="icon"

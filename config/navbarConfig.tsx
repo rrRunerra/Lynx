@@ -5,6 +5,7 @@ import {
   CircleAlert,
   Command,
   Database,
+  Dice1,
   Home,
   Info,
   Key,
@@ -54,17 +55,6 @@ const databases = await safeFetch("/api/database/list", {
 });
 
 export const navItems: NavbarConfig = [
-  {
-    section: "",
-    items: [
-      {
-        label: "Dashboard",
-        href: "/dashboard",
-        icon: <Home className="h-4 w-4" />,
-        subtitle: "System summary and quick insights",
-      },
-    ],
-  },
   {
     section: "Structures",
     items: [
@@ -210,6 +200,20 @@ export const navItems: NavbarConfig = [
             href: "/settings/account",
             icon: <UserIcon className="h-4 w-4" />,
             subtitle: "Update your profile and account preferences",
+          },
+        ],
+      },
+      {
+        label: "Random stuff",
+        href: "",
+        icon: <Dice1 className="h-4 w-4" />,
+        subtitle: "Random stuff",
+        children: [
+          {
+            label: "Random number",
+            href: "/rng",
+            icon: <Dice1 className="h-4 w-4" />,
+            subtitle: "Random number",
           },
         ],
       },

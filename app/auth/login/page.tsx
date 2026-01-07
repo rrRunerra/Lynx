@@ -43,7 +43,7 @@ export default function Page() {
       }
       setMessage(`❌ ${errorMessage}`);
     } else if (res?.ok) {
-      window.location.href = "/dashboard";
+      window.location.href = "/commands";
     }
 
     setLoading(false);
