@@ -22,24 +22,24 @@ model User {
   emailVerified Boolean  @default(false)
 
   email        String  @unique
-  passwordHash String
+  passwordHash String  @db.LongText
   private      Boolean @default(false)
 
-  displayName       String?
+  displayName       String?   @db.LongText
   username          String    @unique
   avatarUrl         String?   @db.LongText
   status            String?   @db.LongText
   passwordChangedAt DateTime?
   apiKeys           ApiKey[]
-  lynxKey           String?
-  discordUserId     String?
+  lynxKey           String?   @db.Text
+  discordUserId     String?   @db.Text
 }
 
 model ApiKey {
   id           String    @id @default(cuid())
   keyHash      String    @unique
-  truncatedKey String?
-  name         String
+  truncatedKey String?   @db.Text
+  name         String    @db.Text
   lastUsed     DateTime?
   createdAt    DateTime  @default(now())
 
@@ -51,11 +51,11 @@ model ApiKey {
 
 model LynxHomeworkExists {
   id             Int    @id @default(autoincrement())
-  superID        String
-  title          String
-  forumChannelID String
-  forumID        String
-  guilID         String
+  superID        String @db.Text
+  title          String @db.MediumText
+  forumChannelID String @db.Text
+  forumID        String @db.Text
+  guilID         String @db.Text
 }
 
 model LynxHomeWorkChannels {

@@ -44,131 +44,70 @@ export default class VideoCommand extends Command {
     const url = interaction.options.getString("url")!;
     await interaction.deferReply();
 
-    const createdFiles: string[] = [];
-    const folder = path.join(process.cwd(), "video_cache");
+    let downloadedFilePath: string | null = null;
 
     try {
-      console.info(`Fetching metadata for: ${url}`);
+      // Use a simple, guaranteed-writable directory
+      const folder = path.join(process.cwd(), "video_cache");
 
-      const metadata: any = await ytdlp(url, {
-        dumpSingleJson: true,
-        noWarnings: true,
-        // We allow playlist data to inspect it
-      });
-
-      const isPlaylist =
-        metadata._type === "playlist" || Array.isArray(metadata.entries);
-      const entries = isPlaylist ? metadata.entries : [metadata];
-
-      // Basic count check
-      const count = entries.length;
-      console.info(`Detected ${count} item(s) (Playlist: ${isPlaylist})`);
-
-      // Prepare Directory
+      // Create directory with explicit verification
       try {
         fs.mkdirSync(folder, { recursive: true });
-        if (!fs.existsSync(folder))
+        if (!fs.existsSync(folder)) {
           throw new Error(`Failed to create: ${folder}`);
+        }
       } catch (dirErr) {
         console.error(`Directory error: ${dirErr}`);
-        await interaction.editReply("Could not create download directory.");
+        await interaction.editReply(
+          "Could not create download directory. Check bot permissions."
+        );
         return;
       }
 
       const uniqueId = `${Date.now()}_${interaction.id}`;
+      // CRITICAL: Use a fixed filename - NO %(ext)s template
+      const outputFileName = `video_${uniqueId}.mp4`;
+      const outputPath = path.join(folder, outputFileName);
 
-      if (isPlaylist) {
-        // Handle Playlist / Gallery
-        const OutputTemplate = `media_${uniqueId}_%(autonumber)s.%(ext)s`;
-        const outputPath = path.join(folder, OutputTemplate);
+      console.info(`Downloading to: ${outputPath}`);
 
-        console.info(`Downloading playlist to: ${outputPath}`);
+      // Download with simplified options
+      await ytdlp(url, {
+        output: outputPath, // Direct path, no template
+        noWarnings: true,
+        restrictFilenames: true,
+        noPlaylist: true,
+        maxFilesize: "10M",
+      });
 
-        await ytdlp(url, {
-          output: outputPath,
-          noWarnings: true,
-          restrictFilenames: true,
-          maxDownloads: 10, // Discord limit per message
-          maxFilesize: "10M",
-        });
-      } else {
-        // Handle Single File
-        const ext = metadata.ext || "mp4";
-        const outputFileName = `media_${uniqueId}.${ext}`;
-        const outputPath = path.join(folder, outputFileName);
-
-        console.info(`Downloading single file to: ${outputPath}`);
-
-        await ytdlp(url, {
-          output: outputPath,
-          noWarnings: true,
-          restrictFilenames: true,
-          noPlaylist: true,
-          maxFilesize: "10M",
-        });
+      // Verify file exists and has content
+      if (!fs.existsSync(outputPath)) {
+        throw new Error(
+          "Download failed - file not created at expected location"
+        );
       }
 
-      // Find all matching files
-      const allFiles = fs.readdirSync(folder);
-      const matchingFiles = allFiles
-        .filter((f) => f.startsWith(`media_${uniqueId}`))
-        .map((f) => path.join(folder, f));
-
-      if (matchingFiles.length === 0) {
-        throw new Error("Download failed - no files found.");
+      const stats = fs.statSync(outputPath);
+      if (stats.size === 0) {
+        throw new Error("Downloaded file is empty");
       }
 
-      // Check sizes
-      for (const file of matchingFiles) {
-        const stats = fs.statSync(file);
-        if (stats.size === 0)
-          throw new Error(`File ${path.basename(file)} is empty`);
-        createdFiles.push(file);
-      }
+      downloadedFilePath = outputPath;
 
-      // Upload to Discord
-      // Discord allows max 10 files. We already limited safe-guards in ytdlp,
-      // but let's slice just in case.
-      const filesToSend = createdFiles.slice(0, 10).map((file) => ({
-        attachment: file,
-        name: path.basename(file),
-      }));
-
-      // Determine content type for message
-      const extensions = createdFiles.map((f) =>
-        path.extname(f).toLowerCase().replace(".", "")
-      );
-      const allImages = extensions.every((ext) =>
-        ["jpg", "jpeg", "png", "webp", "gif"].includes(ext)
-      );
-      const allVideos = extensions.every((ext) =>
-        ["mp4", "webm", "mkv", "mov", "avi"].includes(ext)
-      );
-
-      let contentTypeLabel = "content 📦";
-      if (allImages)
-        contentTypeLabel = `image${createdFiles.length > 1 ? "s" : ""} 🖼️`;
-      else if (allVideos)
-        contentTypeLabel = `video${createdFiles.length > 1 ? "s" : ""} 🎬`;
-
+      // Send the video
       await interaction.editReply({
-        content: `Here’s your ${contentTypeLabel}`,
-        files: filesToSend,
+        files: [{ attachment: downloadedFilePath, name: "video.mp4" }],
       });
     } catch (err: any) {
-      console.error(`Process failed: ${err}`);
-      await interaction.editReply(
-        `Failed. Either the link contains no video or it is invalid. ${url}`
-      );
+      console.error(`Download failed: ${err}`);
+      await interaction.editReply(`Failed to download video.`);
     } finally {
-      // Cleanup all files
-      for (const file of createdFiles) {
-        if (fs.existsSync(file)) {
-          try {
-            fs.unlinkSync(file);
-          } catch (cleanupErr) {
-            console.error(`Cleanup failed for ${file}: ${cleanupErr}`);
-          }
+      // Cleanup
+      if (downloadedFilePath && fs.existsSync(downloadedFilePath)) {
+        try {
+          fs.unlinkSync(downloadedFilePath);
+        } catch (cleanupErr) {
+          console.error(`Cleanup failed: ${cleanupErr}`);
         }
       }
     }
