@@ -42,6 +42,7 @@ ARG LYNX_API_URL
 ENV LYNX_API_URL=${LYNX_API_URL}
 ARG LYNX_PORT
 ENV LYNX_PORT=${LYNX_PORT}
+RUN npx prisma migrate deploy
 RUN npx prisma generate
 
 # Build Next.js application
