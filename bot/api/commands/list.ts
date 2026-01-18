@@ -9,7 +9,14 @@ export default class ListCommandsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all commands",
+      docs: `### Endpoint
+\`GET /commands/list\`
+
+### Summary
+Returns a list of all bot commands and their metadata.
+
+### Response
+JSON array of command objects.`,
     });
     this.client = client;
   }

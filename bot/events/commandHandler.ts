@@ -21,16 +21,22 @@ export default class CommandHandlerEvent extends Event {
       once: false,
       enabled: true,
       description: "Command Handler Event",
-      docs: "Handles slash commands and subcommands execution.",
+      docs: `### Summary
+Triggered by interaction creation.
+
+### Flow
+- Dispatches slash commands and subcommands.
+- Handles permissions and cooldowns.
+- Logs command usage.`,
     });
   }
 
   public async eventExecute(
-    interaction: ChatInputCommandInteraction | AutocompleteInteraction
+    interaction: ChatInputCommandInteraction | AutocompleteInteraction,
   ) {
     if (interaction.isChatInputCommand()) {
       const command: Command | undefined = this.client.commands.get(
-        interaction.commandName
+        interaction.commandName,
       );
 
       if (!command) {
@@ -67,14 +73,14 @@ export default class CommandHandlerEvent extends Event {
         // it works idc
         const hasPerms = command.userPermissions.every((p) =>
           //@ts-ignore
-          member.permissions.has(PermissionsBitField.Flags[p])
+          member.permissions.has(PermissionsBitField.Flags[p]),
         );
         const embed = new EmbedBuilder()
           .setTitle(`You do not have permission to use this command!`)
           .setDescription(
             `You need the following permissions to use this command: ${command.userPermissions.join(
-              ", "
-            )}`
+              ", ",
+            )}`,
           )
           .setColor("Red");
 
@@ -95,8 +101,8 @@ export default class CommandHandlerEvent extends Event {
           .setTitle(`I dont have required permissions to use this command!`)
           .setDescription(
             `I need the following permissions to use this command: ${command.clientPermissions.join(
-              ", "
-            )}`
+              ", ",
+            )}`,
           )
           .setColor("Red");
 
@@ -166,7 +172,7 @@ export default class CommandHandlerEvent extends Event {
                   cooldownAmount -
                   now) /
                 1000
-              ).toFixed(1)} seconds`
+              ).toFixed(1)} seconds`,
             )
             .setColor("Red");
 
@@ -180,7 +186,7 @@ export default class CommandHandlerEvent extends Event {
         timestamps.set(interaction.user.id, now);
         setTimeout(
           () => timestamps.delete(interaction.user.id),
-          cooldownAmount
+          cooldownAmount,
         );
       }
 
@@ -202,7 +208,7 @@ export default class CommandHandlerEvent extends Event {
         //return command?.slashCommandExecute(interaction) || this.client.subCommands?.get(subCommand)?.slashCommandExecute(interaction)
       } catch (e) {
         console.error(
-          `Error while executing slash command ${interaction.commandName}: ${e}`
+          `Error while executing slash command ${interaction.commandName}: ${e}`,
         );
       }
     }
@@ -212,16 +218,16 @@ export default class CommandHandlerEvent extends Event {
 
       if (!command) {
         console.error(
-          `No command matching ${interaction.commandName} was found.`
+          `No command matching ${interaction.commandName} was found.`,
         );
         return;
       }
 
       try {
-        command.autoComplete(interaction);
+        await command.autoComplete(interaction);
       } catch (error) {
         console.error(
-          `Error while executing autocomplete command ${interaction.commandName}: ${error}`
+          `Error while executing autocomplete command ${interaction.commandName}: ${error}`,
         );
       }
     }

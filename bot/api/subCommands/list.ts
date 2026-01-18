@@ -9,7 +9,14 @@ export default class ListCommandsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all sub-commands",
+      docs: `### Endpoint
+\`GET /subCommands/list\`
+
+### Summary
+Lists all registered subcommands.
+
+### Response
+JSON array of subcommand metadata.`,
     });
     this.client = client;
   }

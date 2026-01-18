@@ -8,10 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ChevronLeft, Timer, FileText, Settings2 } from "lucide-react";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 async function getCron(name: string) {
   try {
     const res = await fetch(`http://localhost:4444/crons/getCron/${name}`, {
-      cache: "force-cache",
+      cache: "no-store",
     });
     if (!res.ok) return null;
     return res.json();
@@ -70,8 +73,62 @@ export default async function CronPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-zinc-300 leading-relaxed">
-                {cron.docs || "No documentation available."}
+              <div className="p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-zinc-300 leading-relaxed overflow-x-auto prose prose-invert prose-zinc max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ ...props }) => (
+                      <h1
+                        className="text-xl font-bold mb-4 text-white"
+                        {...props}
+                      />
+                    ),
+                    h2: ({ ...props }) => (
+                      <h2
+                        className="text-lg font-semibold mb-3 text-zinc-100"
+                        {...props}
+                      />
+                    ),
+                    h3: ({ ...props }) => (
+                      <h3
+                        className="text-md font-medium mb-2 text-zinc-200"
+                        {...props}
+                      />
+                    ),
+                    p: ({ ...props }) => (
+                      <p className="mb-4 last:mb-0" {...props} />
+                    ),
+                    ul: ({ ...props }) => (
+                      <ul
+                        className="list-disc pl-6 mb-4 space-y-1"
+                        {...props}
+                      />
+                    ),
+                    ol: ({ ...props }) => (
+                      <ol
+                        className="list-decimal pl-6 mb-4 space-y-1"
+                        {...props}
+                      />
+                    ),
+                    li: ({ ...props }) => (
+                      <li className="text-zinc-400" {...props} />
+                    ),
+                    code: ({ ...props }) => (
+                      <code
+                        className="bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 font-mono text-xs"
+                        {...props}
+                      />
+                    ),
+                    pre: ({ ...props }) => (
+                      <pre
+                        className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 mb-4 overflow-x-auto"
+                        {...props}
+                      />
+                    ),
+                  }}
+                >
+                  {cron.docs || "No documentation available."}
+                </ReactMarkdown>
               </div>
             </CardContent>
           </StarCard>

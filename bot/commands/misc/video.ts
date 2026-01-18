@@ -36,7 +36,17 @@ export default class VideoCommand extends Command {
           required: true,
         },
       ],
-      docs: "Downloads and sends requested video from tiktok, youtube or instagram.",
+      docs: `### Summary
+Download and send videos from various social media platforms.
+
+### Usage
+\`/video <url>\`
+
+### Details
+- Supported platforms: TikTok, Instagram, Twitter/X, YouTube, etc.
+- Uses \`yt-dlp\` for robust processing.
+- Handles gallery/playlist detection.
+- Automatically respects Discord's file size limits.`,
     });
   }
 
@@ -48,7 +58,7 @@ export default class VideoCommand extends Command {
 
     try {
       // Use a simple, guaranteed-writable directory
-      const folder = path.join(process.cwd(), "video_cache");
+      const folder = path.join(process.cwd(), "storage", "video");
 
       // Create directory with explicit verification
       try {
@@ -59,7 +69,7 @@ export default class VideoCommand extends Command {
       } catch (dirErr) {
         console.error(`Directory error: ${dirErr}`);
         await interaction.editReply(
-          "Could not create download directory. Check bot permissions."
+          "Could not create download directory. Check bot permissions.",
         );
         return;
       }
@@ -83,7 +93,7 @@ export default class VideoCommand extends Command {
       // Verify file exists and has content
       if (!fs.existsSync(outputPath)) {
         throw new Error(
-          "Download failed - file not created at expected location"
+          "Download failed - file not created at expected location",
         );
       }
 

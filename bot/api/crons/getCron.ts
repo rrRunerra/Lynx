@@ -9,7 +9,14 @@ export default class GetCronApi extends API {
     super({
       enabled: true,
       route: "/crons/getCron/:name",
-      docs: "Get an cron information",
+      docs: `### Endpoint
+\`GET /crons/getCron/:name\`
+
+### Summary
+Returns info about a specific cron job.
+
+### Parameters
+- \`name\`: The name of the cron job.`,
     });
     this.client = client;
   }

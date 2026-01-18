@@ -19,11 +19,14 @@ import {
   MessageSquare,
 } from "lucide-react";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 async function getCommand(name: string) {
   try {
     const res = await fetch(
       `http://localhost:4444/commands/getCommand/${name}`,
-      { cache: "force-cache" }
+      { cache: "force-cache" },
     );
     if (!res.ok) return null;
     return res.json();
@@ -84,8 +87,62 @@ export default async function CommandPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-zinc-300 leading-relaxed">
-                {command.docs || "No documentation available."}
+              <div className="p-4 rounded-lg bg-zinc-950/50 border border-zinc-800 text-zinc-300 leading-relaxed overflow-x-auto prose prose-invert prose-zinc max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ node, ...props }) => (
+                      <h1
+                        className="text-xl font-bold mb-4 text-white"
+                        {...props}
+                      />
+                    ),
+                    h2: ({ node, ...props }) => (
+                      <h2
+                        className="text-lg font-semibold mb-3 text-zinc-100"
+                        {...props}
+                      />
+                    ),
+                    h3: ({ node, ...props }) => (
+                      <h3
+                        className="text-md font-medium mb-2 text-zinc-200"
+                        {...props}
+                      />
+                    ),
+                    p: ({ node, ...props }) => (
+                      <p className="mb-4 last:mb-0" {...props} />
+                    ),
+                    ul: ({ node, ...props }) => (
+                      <ul
+                        className="list-disc pl-6 mb-4 space-y-1"
+                        {...props}
+                      />
+                    ),
+                    ol: ({ node, ...props }) => (
+                      <ol
+                        className="list-decimal pl-6 mb-4 space-y-1"
+                        {...props}
+                      />
+                    ),
+                    li: ({ node, ...props }) => (
+                      <li className="text-zinc-400" {...props} />
+                    ),
+                    code: ({ node, ...props }) => (
+                      <code
+                        className="bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 font-mono text-xs"
+                        {...props}
+                      />
+                    ),
+                    pre: ({ node, ...props }) => (
+                      <pre
+                        className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 mb-4 overflow-x-auto"
+                        {...props}
+                      />
+                    ),
+                  }}
+                >
+                  {command.docs || "No documentation available."}
+                </ReactMarkdown>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-lg bg-zinc-500/5 border border-zinc-500/10">
@@ -151,9 +208,30 @@ export default async function CommandPage({
                           {sub.enabled ? "Enabled" : "Disabled"}
                         </Badge>
                       </div>
-                      <p className="text-zinc-400 text-sm">
-                        {sub.docs || "No documentation provided."}
-                      </p>
+                      <div className="text-zinc-400 text-sm prose prose-invert prose-zinc max-w-none">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ node, ...props }) => (
+                              <p className="mb-2 last:mb-0" {...props} />
+                            ),
+                            ul: ({ node, ...props }) => (
+                              <ul className="list-disc pl-4 mb-2" {...props} />
+                            ),
+                            li: ({ node, ...props }) => (
+                              <li className="text-zinc-500" {...props} />
+                            ),
+                            code: ({ node, ...props }) => (
+                              <code
+                                className="bg-zinc-800 px-1 rounded text-zinc-300 font-mono text-xs"
+                                {...props}
+                              />
+                            ),
+                          }}
+                        >
+                          {sub.docs || "No documentation provided."}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   ))}
                 </div>

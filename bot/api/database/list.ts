@@ -7,7 +7,11 @@ export default class ListDatabasesApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all databases",
+      docs: `### Endpoint
+\`GET /database/list\`
+
+### Summary
+Returns status or statistics from the Prisma database.`,
     });
     this.client = client;
   }
@@ -15,7 +19,7 @@ export default class ListDatabasesApi extends API {
   public GET = (req: Request, res: Response) => {
     const databases = Object.keys(this.client.prisma).filter(
       (key) =>
-        !key.startsWith("$") && !key.startsWith("_") && key != "constructor"
+        !key.startsWith("$") && !key.startsWith("_") && key != "constructor",
     );
     return res.json(databases);
   };

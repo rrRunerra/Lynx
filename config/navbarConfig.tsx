@@ -106,7 +106,7 @@ export const navItems: NavbarConfig = [
           ? undefined
           : apis?.map((api: any) => ({
               label: api.name,
-              href: `/apis/${api.name}`,
+              href: `/apis/${encodeURIComponent(api.name)}`,
               subtitle: `View details and docs for ${api.name} API`,
             })),
       },

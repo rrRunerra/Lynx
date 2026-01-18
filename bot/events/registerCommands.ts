@@ -13,7 +13,13 @@ export default class RegisterCommandsEvent extends Event {
       once: true,
       enabled: true,
       description: "Register Slash Commands",
-      docs: "Registers commands globally, for specified servers or only for dev server.",
+      docs: `### Summary
+Synchronizes local command definitions with Discord.
+
+### Flow
+- Fetches existing application commands.
+- Compares and updates Global, Guild, and Dev commands.
+- Removes outdated command definitions.`,
     });
   }
 
@@ -35,18 +41,18 @@ export default class RegisterCommandsEvent extends Event {
       (command) =>
         command.dev != "development" &&
         command.serverOnly.length == 0 &&
-        command.enabled
+        command.enabled,
     );
 
     const devCommandList = this.client.commands.filter(
-      (command) => command.dev == "development" && command.enabled
+      (command) => command.dev == "development" && command.enabled,
     );
 
     const serverCommandList = this.client.commands.filter(
       (command) =>
         command.enabled &&
         command.dev != "development" &&
-        command.serverOnly.length > 0
+        command.serverOnly.length > 0,
     );
 
     if (globalCommandList.size > 0) {
@@ -66,15 +72,15 @@ export default class RegisterCommandsEvent extends Event {
             Routes.applicationGuildCommands(clientId, serverId),
             {
               body: this.GetJson(new Collection([[command.name, command]])),
-            }
+            },
           );
           console.info(
-            `Loaded command: ${command.name} in server: ${serverId}`
+            `Loaded command: ${command.name} in server: ${serverId}`,
           );
         }
       }
       console.info(
-        `Succesfully loaded ${serverCommandList.size} server (/) commands`
+        `Succesfully loaded ${serverCommandList.size} server (/) commands`,
       );
     }
 
@@ -84,7 +90,7 @@ export default class RegisterCommandsEvent extends Event {
           Routes.applicationGuildCommands(clientId, process.env.DEV_SERVER!),
           {
             body: this.GetJson(devCommandList),
-          }
+          },
         )
         .then((c: any) => {
           console.info(`Succesfully loaded ${c.length} dev (/) commands`);

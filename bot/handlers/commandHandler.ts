@@ -14,7 +14,7 @@ export class CommandHandler {
 
   public async loadCommands() {
     const files = (await glob("bot/commands/**/*.{js,ts}")).map((filepath) =>
-      path.resolve(filepath)
+      path.resolve(filepath),
     );
     files.map(async (file: string) => {
       const { default: CommandClass } = await import(pathToFileURL(file).href);
@@ -24,7 +24,7 @@ export class CommandHandler {
         const command: SubCommand = new CommandClass();
         if (!command.name) {
           console.error(
-            `Subcommand: ${file.split(path.sep).pop()} does not have a name`
+            `Subcommand: ${file.split(path.sep).pop()} does not have a name`,
           );
           return;
         }
@@ -38,7 +38,7 @@ export class CommandHandler {
 
       if (!command.name) {
         console.error(
-          `Command: ${file.split(path.sep).pop()} does not have a name`
+          `Command: ${file.split(path.sep).pop()} does not have a name`,
         );
         return;
       }

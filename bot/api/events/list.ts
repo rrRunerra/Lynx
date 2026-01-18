@@ -9,7 +9,14 @@ export default class ListEventsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all events",
+      docs: `### Endpoint
+\`GET /events/list\`
+
+### Summary
+Lists all active bot event listeners.
+
+### Response
+JSON array of event metadata.`,
     });
     this.client = client;
   }

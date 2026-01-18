@@ -8,7 +8,14 @@ export default class ListApisApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all api endpoints",
+      docs: `### Endpoint
+\`GET /apis/list\`
+
+### Summary
+Lists all registered API endpoints and their documentation.
+
+### Response
+JSON array of API metadata.`,
     });
     this.client = client;
   }

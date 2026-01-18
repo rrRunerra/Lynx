@@ -38,7 +38,16 @@ export default class AuthCommand extends Command {
         },
       ],
       allowDm: true,
-      docs: "Links the bot to the web account using an API Key.",
+      docs: `### Summary
+Link your Discord account for web dashboard access.
+
+### Usage
+\`/auth api:<key> lynxkey:<secret>\`
+
+### Details
+- Verifies and hashes the provided API key.
+- Updates status to 'linked' in the database.
+- Required to unlock restricted dashboard features.`,
     });
   }
 
@@ -82,7 +91,7 @@ export default class AuthCommand extends Command {
         .setColor("Green")
         .setTitle("Authentication Successful")
         .setDescription(
-          `Successfully linked Discord to web account for **${apiKey.user.username}**.\nYou can now access restricted features.`
+          `Successfully linked Discord to web account for **${apiKey.user.username}**.\nYou can now access restricted features.`,
         )
         .setFooter({ text: "Lynx Security System" })
         .setTimestamp();

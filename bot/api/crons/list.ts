@@ -9,7 +9,14 @@ export default class ListCronsApi extends API {
   constructor(client: LynxClient) {
     super({
       enabled: true,
-      docs: "List all crons",
+      docs: `### Endpoint
+\`GET /crons/list\`
+
+### Summary
+Lists all registered cron jobs.
+
+### Response
+JSON array of cron metadata.`,
     });
     this.client = client;
   }

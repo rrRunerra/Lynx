@@ -12,7 +12,11 @@ export default class ListTeachersCommand extends SubCommand {
     super(client, {
       name: "edu.list-teachers",
       enabled: true,
-      docs: "List all teachers from Edupage",
+      docs: `### Summary
+List all teachers registered on Edupage.
+
+### Usage
+\`/edu list-teachers\``,
     });
   }
 
@@ -33,7 +37,7 @@ export default class ListTeachersCommand extends SubCommand {
           shortName: string;
           id: string;
         }) =>
-          `${item.firstName} ${item.lastName} (${item.shortName}) - ID: ${item.id}`
+          `${item.firstName} ${item.lastName} (${item.shortName}) - ID: ${item.id}`,
       )
       .join("\n");
 

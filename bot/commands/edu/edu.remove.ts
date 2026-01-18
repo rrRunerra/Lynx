@@ -11,7 +11,11 @@ export default class EduRemoveCommand extends SubCommand {
     super(client, {
       name: "edu.remove",
       enabled: true,
-      docs: "Remove homework by superID",
+      docs: `### Summary
+Remove a specific homework entry by its SuperID.
+
+### Usage
+\`/edu remove <superid>\``,
     });
   }
 
@@ -32,7 +36,7 @@ export default class EduRemoveCommand extends SubCommand {
       })
       .catch((e) => {
         console.error(
-          `Error deleting homework ${superId} in guild ${interaction.guild?.name}: ${e}`
+          `Error deleting homework ${superId} in guild ${interaction.guild?.name}: ${e}`,
         );
         embed.setTitle("Error deleting homework");
         embed.setColor("Red");

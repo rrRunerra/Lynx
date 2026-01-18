@@ -9,7 +9,14 @@ export default class GetSubCommandApi extends API {
     super({
       enabled: true,
       route: "/subCommands/getSubCommand/:name",
-      docs: "Get an subCommand information",
+      docs: `### Endpoint
+\`GET /subCommands/getSubCommand/:name\`
+
+### Summary
+Returns info about a specific subcommand.
+
+### Parameters
+- \`name\`: The name of the subcommand (e.g., \`edu.sync\`).`,
     });
     this.client = client;
   }

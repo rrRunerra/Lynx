@@ -68,7 +68,53 @@ model LynxRngRigConfig {
   ignoredNumbers Json   @db.Json
 }
 
+model LynxKickHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  guildId   String
+  moderator String
+  reason    String   @db.LongText
+  createdAt DateTime @default(now())
+}
+
+model LynxBanHistory {
+  id        String    @id @default(cuid())
+  userId    String
+  guildId   String
+  moderator String
+  reason    String    @db.LongText
+  duration  Int       @db.Int
+  until     DateTime?
+  createdAt DateTime  @default(now())
+}
+
 enum Role {
   USER
   ADMIN
+}
+
+model LynxClearBatch {
+  id          String               @id @default(cuid())
+  guildId     String
+  channelId   String
+  moderatorId String
+  createdAt   DateTime             @default(now())
+  messages    LynxClearedMessage[]
+}
+
+model LynxClearedMessage {
+  id          String   @id @default(cuid())
+  batchId     String
+  authorId    String
+  username    String   @db.Text
+  avatarUrl   String?  @db.Text
+  content     String?  @db.LongText
+  embeds      Json?    @db.Json
+  attachments Json?    @db.Json
+  createdAt   DateTime @default(now())
+  timestamp   DateTime
+
+  batch LynxClearBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
 }

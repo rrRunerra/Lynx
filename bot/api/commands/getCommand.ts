@@ -9,7 +9,17 @@ export default class GetCommandApi extends API {
     super({
       enabled: true,
       route: "/commands/getCommand/:name",
-      docs: "Get an command information",
+      docs: `### Endpoint
+\`GET /commands/getCommand/:name\`
+
+### Summary
+Returns detailed information about a specific command.
+
+### Parameters
+- \`name\`: The name of the command to fetch.
+
+### Response
+Detailed command object or error.`,
     });
     this.client = client;
   }

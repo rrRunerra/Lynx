@@ -18,7 +18,7 @@ export default class EduSyncCommand extends SubCommand {
     super(client, {
       name: "edu.sync",
       enabled: true,
-      docs: "Sync homework from Edupage to Discord",
+      docs: `Sync homework from Edupage to Discord. Posts new assignments to configured forums.`,
     });
   }
 
@@ -86,7 +86,7 @@ export default class EduSyncCommand extends SubCommand {
             testId: work.testId,
             type: work.type,
           };
-        })
+        }),
       )
     ).filter((hw) => hw != null);
 
@@ -112,7 +112,7 @@ export default class EduSyncCommand extends SubCommand {
       }
 
       const forum: ForumChannel = (await guild.channels.cache.get(
-        forumId
+        forumId,
       )) as ForumChannel;
       if (!forum) {
         console.error(`No forum found`);
@@ -133,7 +133,7 @@ export default class EduSyncCommand extends SubCommand {
     work: any,
     forum: ForumChannel,
     guild: any,
-    utils: EdupageUtils
+    utils: EdupageUtils,
   ) {
     if (work.testId == undefined) {
       const title =
@@ -210,7 +210,7 @@ export default class EduSyncCommand extends SubCommand {
     }
 
     const messageChannel = guild.channels.cache.get(
-      forumChan.id
+      forumChan.id,
     ) as TextChannel;
     const text: string[] = [];
     const files: { src: string; name: string }[] = [];
@@ -257,7 +257,7 @@ export default class EduSyncCommand extends SubCommand {
                 src: file.src,
                 name: `${Math.random()}file_${file.name}`,
               };
-            })
+            }),
           );
         }
 
@@ -268,14 +268,14 @@ export default class EduSyncCommand extends SubCommand {
                 src: img.src,
                 name: `${Math.random()}img_${img.name}`,
               };
-            })
+            }),
           );
         }
 
         if (widget.widgetClass == "TextETestWidget") {
           const htmlText = utils.stripHtmlTags(widget.props.htmlText);
           const strippedParsedText = utils.stripHtmlTags(
-            widget.props._parsedHtmlText
+            widget.props._parsedHtmlText,
           );
 
           if (widget?.props?.files) {
@@ -314,7 +314,7 @@ export default class EduSyncCommand extends SubCommand {
 
     // Download helper
     const downloadAndSend = async (
-      fileList: { src: string; name: string }[]
+      fileList: { src: string; name: string }[],
     ) => {
       for (const file of fileList) {
         const fileUrl = "https://sps-snina.edupage.org" + file.src;

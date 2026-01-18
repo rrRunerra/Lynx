@@ -10,7 +10,13 @@ export default class ReadyEvent extends Event {
       once: true,
       enabled: true,
       description: "Ready event",
-      docs: "Logs when the bot is online and ready.",
+      docs: `### Summary
+Triggered when the client becomes ready.
+
+### Flow
+- Initializes bot status.
+- Caches guild and user information.
+- Registers slash commands.`,
     });
   }
 

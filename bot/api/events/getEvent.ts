@@ -9,7 +9,14 @@ export default class GetEventApi extends API {
     super({
       enabled: true,
       route: "/events/getEvent/:name",
-      docs: "Get an event information",
+      docs: `### Endpoint
+\`GET /events/getEvent/:name\`
+
+### Summary
+Returns info about a specific event listener.
+
+### Parameters
+- \`name\`: The name of the event.`,
     });
     this.client = client;
   }

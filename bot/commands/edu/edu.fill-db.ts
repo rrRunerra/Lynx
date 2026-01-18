@@ -13,7 +13,11 @@ export default class EduFillDbCommand extends SubCommand {
     super(client, {
       name: "edu.fill-db",
       enabled: true,
-      docs: "Fill database with existing homework (without posting)",
+      docs: `### Summary
+Populate the database with existing Edupage assignments without posting.
+
+### Usage
+\`/edu fill-db\``,
     });
   }
 
@@ -78,7 +82,7 @@ export default class EduFillDbCommand extends SubCommand {
             testId: work.testId,
             type: work.type,
           };
-        })
+        }),
       )
     ).filter((hw) => hw != null);
 
@@ -120,7 +124,7 @@ export default class EduFillDbCommand extends SubCommand {
       const embed = new EmbedBuilder()
         .setTitle("Info")
         .setDescription(
-          `No channel id found for subjects for ${noId} homeworks.`
+          `No channel id found for subjects for ${noId} homeworks.`,
         )
         .setColor("Red");
       utils.edupage.exit();

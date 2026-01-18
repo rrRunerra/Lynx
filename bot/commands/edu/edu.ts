@@ -65,7 +65,17 @@ export default class EduCommand extends Command {
         },
       ],
       userOnly: [],
-      docs: "Edupage utilities: sync homework, list teachers, remove items.",
+      docs: `### Summary
+Main command for Edupage utilities.
+
+### Usage
+\`/edu <subcommand> [options]\`
+
+### Details
+- **sync**: Sync homework to Discord.
+- **list-teachers**: List registered teachers.
+- **fill-db**: Populate database without posting.
+- **remove**: Delete homework by ID.`,
     });
   }
 
