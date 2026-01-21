@@ -5,6 +5,8 @@ import "./globals.css";
 import Sidebar from "@/components/navbar/Sidebar";
 import { Providers } from "./providers";
 import { auth } from "@/lib/auth";
+import PWARegistration from "../components/PWARegistration";
+import type { Viewport } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,10 +18,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Lynx",
-  description: "Dashboard for Lynx by Runerra",
+  description: "Dashboard for Lynx",
   manifest: "/site.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Lynx",
+  },
 };
 
 export default async function RootLayout({
@@ -34,6 +48,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
+        <PWARegistration />
         <Providers>
           <div className="flex h-screen">
             {session ? <Sidebar /> : null}

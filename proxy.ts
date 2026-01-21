@@ -5,7 +5,14 @@ import { getToken } from "next-auth/jwt";
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/auth") || pathname.startsWith("/api")) {
+  if (
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api") ||
+    pathname === "/site.webmanifest" ||
+    pathname === "/sw.js" ||
+    pathname.endsWith(".png") ||
+    pathname.endsWith(".svg")
+  ) {
     return NextResponse.next();
   }
 
@@ -32,7 +39,7 @@ export async function proxy(req: NextRequest) {
         where: {
           email: token.email as string,
         },
-      })
+      }),
     );
 
     if (!user) {
@@ -51,7 +58,7 @@ export async function proxy(req: NextRequest) {
       const user = await import("@/lib/prisma").then((m) =>
         m.default.user.findUnique({
           where: { email: token.email as string },
-        })
+        }),
       );
 
       if (user) {
@@ -73,7 +80,7 @@ export async function proxy(req: NextRequest) {
             m.encode({
               token: newToken,
               secret: process.env.NEXTAUTH_SECRET!,
-            })
+            }),
           );
 
           const response = NextResponse.next();
@@ -104,5 +111,7 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|site\\.webmanifest|sw\\.js).*)",
+  ],
 };
