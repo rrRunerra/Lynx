@@ -16,21 +16,39 @@ export function StarBackground({ className, ...props }: StarBackgroundProps) {
       animationDuration: string;
     }>
   >([]);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const newStars = [...Array(20)].map(() => ({
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      width: `${Math.random() * 2 + 1}px`,
-      height: `${Math.random() * 2 + 1}px`,
-      animationDelay: `${Math.random() * 2}s`,
-      animationDuration: `${Math.random() * 3 + 2}s`,
-    }));
-    setStars(newStars);
+    if (!containerRef.current) return;
+
+    const updateStars = () => {
+      const { width, height } = containerRef.current!.getBoundingClientRect();
+      const area = width * height;
+      // Density: approx 1 star per 2500px^2 (50x50 area)
+      // For a 300x200 card (60000px), this gives 24 stars.
+      const starCount = Math.floor(area / 2500);
+
+      const newStars = [...Array(Math.max(5, starCount))].map(() => ({
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        width: `${Math.random() * 2 + 1}px`,
+        height: `${Math.random() * 2 + 1}px`,
+        animationDelay: `${Math.random() * 2}s`,
+        animationDuration: `${Math.random() * 3 + 2}s`,
+      }));
+      setStars(newStars);
+    };
+
+    const observer = new ResizeObserver(updateStars);
+    observer.observe(containerRef.current);
+    updateStars(); // Initial calculation
+
+    return () => observer.disconnect();
   }, []);
 
   return (
     <div
+      ref={containerRef}
       className={cn("absolute inset-0 z-0 pointer-events-none", className)}
       {...props}
     >
@@ -50,9 +68,6 @@ export function StarBackground({ className, ...props }: StarBackgroundProps) {
           />
         ))}
       </div>
-
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-linear-to-br from-(--gradient-from,rgba(99,102,241,0.05)) via-transparent to-(--gradient-to,rgba(168,85,247,0.05)) opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
     </div>
   );
 }
